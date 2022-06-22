@@ -1,0 +1,86 @@
+package com.example.springsecuritydemo.entity;
+
+import com.mchange.v1.identicator.Identicator;
+
+import javax.annotation.processing.Generated;
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
+public class Product {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    @Basic
+    private String name;
+    @Basic
+    private String description;
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name = "products")
+    private Category category;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, mappedBy = "product")
+    private Commande commande;
+
+
+    public Product(int id, String name, String description, Category category, Commande commande) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.category = category;
+        this.commande = commande;
+    }
+
+    public Product(String name, String description, Category category, Commande commande) {
+        this.name = name;
+        this.description = description;
+        this.category = category;
+        this.commande = commande;
+    }
+
+
+    public Product() {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Commande getCommande() {
+        return commande;
+    }
+
+    public void setCommande(Commande commande) {
+        this.commande = commande;
+    }
+}
