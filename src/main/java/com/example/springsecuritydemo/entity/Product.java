@@ -16,6 +16,8 @@ public class Product {
     private String name;
     @Basic
     private String description;
+    @Basic
+    private Float price;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "products")
@@ -25,21 +27,22 @@ public class Product {
     private Commande commande;
 
 
-    public Product(int id, String name, String description, Category category, Commande commande) {
+    public Product(int id, String name, String description, Float price, Category category, Commande commande) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.price = price;
         this.category = category;
         this.commande = commande;
     }
 
-    public Product(String name, String description, Category category, Commande commande) {
+    public Product(String name, String description, Float price, Category category, Commande commande) {
         this.name = name;
         this.description = description;
+        this.price = price;
         this.category = category;
         this.commande = commande;
     }
-
 
     public Product() {
     }
@@ -66,6 +69,14 @@ public class Product {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Float getPrice() {
+        return price;
+    }
+
+    public void setPrice(Float price) {
+        this.price = price;
     }
 
     public Category getCategory() {
