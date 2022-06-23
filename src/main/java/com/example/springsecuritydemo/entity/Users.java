@@ -8,14 +8,14 @@ public class Users {
     @Id
     @Column(name = "username")
     private String username;
-    @Basic
+
+
     @Column(name = "password")
     private String password;
-    @Basic
+
     @Column(name = "enabled")
     private byte enabled;
 
-    @Basic
     @Column(name = "locked")
     private boolean locked;
 

@@ -35,18 +35,20 @@ public class DemoSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
     // /leaders/** star star mean all subdirectories
-        http.authorizeRequests()
+        http.httpBasic().and().authorizeRequests()
                 //this is used only to be authentificated no matter which role did you have
                 //.anyRequest().authenticated()
                 .antMatchers("/front/**").hasRole("USER")
                 .antMatchers("/users/**").hasRole("MANAGER")
                 .antMatchers("/systems/**").hasRole("ADMIN")
                 .and()
+                .formLogin();
+/*                .and()
                 .formLogin().loginPage("/showMyLoginPage").loginProcessingUrl("/authenticateTheUser").permitAll()
                 .and()
                 .logout().permitAll()
                 .and()
-                .exceptionHandling().accessDeniedPage("/access-denied");
+                .exceptionHandling().accessDeniedPage("/access-denied")*/;
     }
 
 }
