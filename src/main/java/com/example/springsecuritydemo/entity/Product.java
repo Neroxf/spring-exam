@@ -1,5 +1,6 @@
 package com.example.springsecuritydemo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mchange.v1.identicator.Identicator;
 
 import javax.annotation.processing.Generated;
@@ -19,8 +20,9 @@ public class Product {
     @Basic
     private Float price;
 
+    @JsonIgnore
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinColumn(name = "products")
+    @JoinColumn(name = "categoryId")
     private Category category;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, mappedBy = "product")

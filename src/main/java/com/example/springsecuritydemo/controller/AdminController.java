@@ -27,7 +27,10 @@ public class AdminController {
 
     @GetMapping("/Products")
     public List<Product> showProducts(){
-        return (List<Product>) productRepo.findAll();
+        System.out.println("---------------------starting");
+        List<Product> products = (List<Product>) productRepo.findAll();
+        System.out.println("---------------------pass");
+        return products;
     }
 
     @GetMapping("/Products/{productId}")
