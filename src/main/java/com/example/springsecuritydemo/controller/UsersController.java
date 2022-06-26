@@ -10,10 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("users")
@@ -53,6 +50,16 @@ public class UsersController {
 
     @PutMapping("/saveUser")
     public Users updateUser(@RequestBody Users user){
+        usersRepo.save(user);
+        return user;
+    }
+
+    @PutMapping("/lockUser")
+    public Users lockUser(@RequestParam String username){
+        Users user = usersRepo.findById(username).orElse(null);
+        if(user == null)
+            return null;
+        user.setLocked(!user.isLocked());
         usersRepo.save(user);
         return user;
     }
