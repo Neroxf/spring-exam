@@ -1,10 +1,7 @@
 package com.example.springsecuritydemo.controller;
 
 
-import com.example.springsecuritydemo.entity.Category;
-import com.example.springsecuritydemo.entity.Commande;
-import com.example.springsecuritydemo.entity.Product;
-import com.example.springsecuritydemo.entity.Users;
+import com.example.springsecuritydemo.entity.*;
 import com.example.springsecuritydemo.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -40,42 +37,32 @@ public class FrontController {
         return products;
     }
 
+    @PostMapping("/panier")
+    public Panier addPanier(@RequestParam String user_id){
+        Users user = usersRepo.findById(user_id).orElse(null);
+        if(user == null)
+            return null;
 
-    @GetMapping("/list")
-    public String showProducts(Model model){
-        List<Category> categories = (List<Category>) categoryRepo.findAll();
+        Panier panier = new Panier(user, null);
 
-        model.addAttribute("categories", categories);
-
-        return "list-category";
+        panierRepo.save(panier);
+        return panier;
     }
 
-    @GetMapping("showProducts")
-    public String showProducts(@RequestParam("categoryId") int id, Model model){
+    @PostMapping("/commande")
+    public Commande addCommande(@RequestParam int quantity,@RequestParam int panier_id,@RequestParam int product_id,@RequestParam String username){
+        Users user = usersRepo.findById(username).orElse(null);
+        Panier panier = panierRepo.findById(panier_id).orElse(null);
+        Product product = productRepo.findById(product_id).orElse(null);
 
+        if (user == null || panier == null || product == null)
+            return null;
 
-        List<Product> products = productRepo.findAllByCategory(categoryRepo.findById(id).orElse(null));
+        Commande commande = new Commande(quantity, panier, user, product);
 
-        model.addAttribute("products", products);
-
-        return "productss";
+        commandeRepo.save(commande);
+        return commande;
     }
-
-    @GetMapping("search")
-    public String showProduct(){
-        return "search";
-    }
-
-
-/*    @RequestMapping("addCommande")
-    public String addproduct(@RequestParam("productId") int id, Principal principal){
-        Users user = usersRepo.findById(principal.getName()).orElse(null);
-        Product product = productRepo.findById(id).orElse(null);
-        commandeRepo.save(new Commande(user, product, 1));
-
-        return "redirect:/front/list";
-    }*/
-
 
 }
 

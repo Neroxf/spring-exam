@@ -15,7 +15,7 @@ public class Category {
     @Basic
     private String name;
 
-    @JsonIgnore
+
     @OneToMany(mappedBy = "category", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     private List<Product> products;
 
