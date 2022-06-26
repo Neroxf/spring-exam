@@ -1,5 +1,8 @@
 package com.example.springsecuritydemo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -14,7 +17,7 @@ public class Users {
     private String password;
 
     @Column(name = "enabled")
-    private byte enabled;
+    private boolean enabled;
 
     @Column(name = "locked")
     private boolean locked;
@@ -22,8 +25,6 @@ public class Users {
     @Basic
     private String email;
 
-    @Basic
-    private boolean validate;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "username")
@@ -32,17 +33,27 @@ public class Users {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
     private List<Commande> commandes;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, mappedBy = "user")
     private List<Panier> paniers;
 
 
-    public Users(String username, String password, byte enabled, boolean locked, String email, boolean validate, List<Authorities> authorities, List<Commande> commandes, List<Panier> paniers) {
+    public Users(String username, String password, boolean enabled, boolean locked, String email, List<Authorities> authorities, List<Commande> commandes, List<Panier> paniers) {
         this.username = username;
         this.password = password;
         this.enabled = enabled;
         this.locked = locked;
         this.email = email;
-        this.validate = validate;
+        this.authorities = authorities;
+        this.commandes = commandes;
+        this.paniers = paniers;
+    }
+
+    public Users(String password, boolean enabled, boolean locked, String email, List<Authorities> authorities, List<Commande> commandes, List<Panier> paniers) {
+        this.password = password;
+        this.enabled = enabled;
+        this.locked = locked;
+        this.email = email;
         this.authorities = authorities;
         this.commandes = commandes;
         this.paniers = paniers;
@@ -50,7 +61,6 @@ public class Users {
 
     public Users() {
     }
-
 
     public String getUsername() {
         return username;
@@ -68,11 +78,11 @@ public class Users {
         this.password = password;
     }
 
-    public byte getEnabled() {
+    public boolean isEnabled() {
         return enabled;
     }
 
-    public void setEnabled(byte enabled) {
+    public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 
@@ -90,14 +100,6 @@ public class Users {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public boolean isValidate() {
-        return validate;
-    }
-
-    public void setValidate(boolean validate) {
-        this.validate = validate;
     }
 
     public List<Authorities> getAuthorities() {

@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@RestController("/login")
+@RestController()
+@RequestMapping("/login")
 public class LoginController {
     @Autowired
     private AuthoritiesRepo authoritiesRepo ;
@@ -20,12 +21,12 @@ public class LoginController {
     private UsersRepo usersRepo ;
 
 
-    @PostMapping("/login")
+    @GetMapping("/login")
     public Users showMyLoginPage(@RequestParam String username, @RequestParam String password){
         Users user = usersRepo.findById(username).orElse(null);
 
         if(user != null){
-            if(user.getPassword()== password)
+            if(user.getPassword().equals(password))
                 return user;
         }
         return null;
@@ -37,7 +38,7 @@ public class LoginController {
         authorities.add(new Authorities(user.getUsername(),"ROLE_USER" ));
         user.setAuthorities(authorities);
         user.setLocked(true);
-        user.setEnabled((byte) 1);
+        user.setEnabled(true);
         usersRepo.save(user);
     }
 
