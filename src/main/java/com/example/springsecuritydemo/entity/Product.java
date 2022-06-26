@@ -1,7 +1,6 @@
 package com.example.springsecuritydemo.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mchange.v1.identicator.Identicator;
 
@@ -27,7 +26,7 @@ public class Product {
     @JoinColumn(name = "categoryId")
     private Category category;
 
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonManagedReference
     @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}, mappedBy = "product")
     private Commande commande;
 
