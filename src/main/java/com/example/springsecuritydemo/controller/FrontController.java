@@ -9,15 +9,12 @@ import com.example.springsecuritydemo.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/front")
 public class FrontController {
     @Autowired
@@ -35,6 +32,13 @@ public class FrontController {
     @Autowired
     private UsersRepo usersRepo;
 
+
+    @GetMapping("/products")
+    public List<Product> showProductss(@RequestParam("search") String search){
+        System.out.println(search);
+        List<Product> products = productRepo.findAllByNameContaining(search);
+        return products;
+    }
 
 
     @GetMapping("/list")
@@ -62,15 +66,6 @@ public class FrontController {
         return "search";
     }
 
-    @PostMapping("searchproducts")
-    public String showProductss(@RequestParam("search") String search, Model model){
-
-        System.out.println(search);
-        List<Product> products = productRepo.findAllByName(search);
-
-        model.addAttribute("products", products);
-        return "searchAg";
-    }
 
 /*    @RequestMapping("addCommande")
     public String addproduct(@RequestParam("productId") int id, Principal principal){
