@@ -10,11 +10,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000/")
 @RequestMapping("/systems")
 public class AdminController {
     @Autowired
@@ -40,7 +42,14 @@ public class AdminController {
 
 
     @PostMapping("/Products")
-    public Product saveCustomer(@RequestBody Product product){
+    public Product saveCustomer(
+            @RequestParam String name,
+            @RequestParam Float price,
+            @RequestParam String description,
+            @RequestParam Integer categoryId
+    ){
+        Category category = categoryRepo.findById(categoryId).orElse(null);
+        Product product = new Product(name, description, price, category);
 
         productRepo.save(product);
 
@@ -48,7 +57,21 @@ public class AdminController {
     }
 
     @PutMapping("/Products")
-    public String updateCustomer(@RequestBody Product product){
+    public String updateCustomer(
+            @RequestParam int productId,
+            @RequestParam String name,
+            @RequestParam Float price,
+            @RequestParam String description,
+            @RequestParam Integer categoryId
+    ){
+        Category category = categoryRepo.findById(categoryId).orElse(null);
+
+        Product product = productRepo.findById(productId).orElse(null);
+        product.setName(name);
+        product.setPrice(price);
+        product.setDescription(description);
+        product.setCategory(category);
+
         productRepo.save(product);
 
         return "Product";
@@ -109,15 +132,19 @@ public class AdminController {
     }
 
     @PostMapping("/Categories")
-    public Category saveCategory(@RequestBody Category category){
+    public Category saveCategory(
+            @RequestParam String categoryName
+    ){
+        List<Product> noProducts = new ArrayList<Product>();
+        Category category = new Category(categoryName, noProducts);
         categoryRepo.save(category);
 
         return category;
     }
 
-    @DeleteMapping("/Categories/{productId}")
-    public boolean deleteCateg(@PathVariable int productId){
-        productRepo.deleteById(productId);
+    @DeleteMapping("/Categories/{categoryId}")
+    public boolean deleteCateg(@PathVariable int categoryId){
+        categoryRepo.deleteById(categoryId);
 
         return true;
     }

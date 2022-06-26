@@ -20,7 +20,6 @@ public class Product {
     @Basic
     private Float price;
 
-    @JsonIgnore
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "categoryId")
     private Category category;
@@ -44,6 +43,13 @@ public class Product {
         this.price = price;
         this.category = category;
         this.commande = commande;
+    }
+
+    public Product(String name, String description, Float price, Category category) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.category = category;
     }
 
     public Product() {
